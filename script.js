@@ -26,16 +26,15 @@ let player = {
 };
 
 // Player bullets array
-let bullets = [];
-
-
-// Alien configuration
+let bullets = []; 
 const alienRows = 3;
 const alienCols = 5;
 const alienWidth = 20;
 const alienHeight = 20;
 const alienSpeed = 2;
-const alienMoveInterval = 10000; // 10 seconds
+const DESCENT_INTERVAL = 5000; // ms
+const ROW_DROP = 20; // px
+let descentTimer = 0; // 累積時間
 let aliens = [];
 let alienDirection = 1;
 let lastMoveTime = 0; // Track the last time aliens moved
@@ -104,15 +103,23 @@ function gameLoop() {
         }
     });
     
-    // Stop alien movement
-    // (Commenting out movement code)
-    // if (moveDown) {
-    //     alienDirection *= -1;
-    //     aliens.forEach(alien => alien.y += 20);
-    // } else {
-    //     aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
-    // }
-    // lastMoveTime = currentTime;
+    // Move aliens horizontally
+    aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
+    
+    // Check if aliens hit the edge
+    aliens.forEach(alien => {
+        if (alien.x + alien.width >= canvas.width || alien.x <= 0) {
+            alienDirection *= -1;
+            return false; // Exit early since we only need to change direction once
+        }
+    });
+    
+    // Update descent timer and drop aliens
+    descentTimer += 16; // Approximate frame time in ms
+    if (descentTimer >= DESCENT_INTERVAL) {
+        aliens.forEach(alien => alien.y += ROW_DROP);
+        descentTimer -= DESCENT_INTERVAL;
+    }
     
     // Check game over conditions
     if (aliens.length === 0) {
@@ -149,6 +156,7 @@ startBtn.addEventListener('click', () => {
         player.x = canvas.width / 2 - 20;
         initAliens();
         bullets = [];
+        descentTimer = 0; // Reset descent timer
         isGameRunning = true;
         gameLoop();
     }
