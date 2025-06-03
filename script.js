@@ -35,8 +35,10 @@ const alienCols = 5;
 const alienWidth = 20;
 const alienHeight = 20;
 const alienSpeed = 2;
+const alienMoveInterval = 10000; // 10 seconds
 let aliens = [];
 let alienDirection = 1;
+let lastMoveTime = 0; // Track the last time aliens moved
 
 // Initialize aliens
 function initAliens() {
@@ -102,12 +104,16 @@ function gameLoop() {
         }
     });
     
-    // Move aliens
-    if (moveDown) {
-        alienDirection *= -1;
-        aliens.forEach(alien => alien.y += 20);
-    } else {
-        aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
+    // Move aliens only if enough time has passed
+    const currentTime = Date.now();
+    if (currentTime - lastMoveTime >= alienMoveInterval) {
+        if (moveDown) {
+            alienDirection *= -1;
+            aliens.forEach(alien => alien.y += 20);
+        } else {
+            aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
+        }
+        lastMoveTime = currentTime;
     }
     
     // Check game over conditions
