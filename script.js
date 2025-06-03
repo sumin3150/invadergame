@@ -17,14 +17,14 @@ const platform = {
 let isGameRunning = false;
 let score = 0;
 let lives = 3;
-const FIRE_INTERVAL = 150; // ms ≈ 6–7 shots/sec
+const FIRE_INTERVAL = 15; // ms ≈ 66 shots/sec
 let lastShot = 0;
 let player = {
     x: canvas.width / 2 - 20,
     y: canvas.height - 50,
     width: 40,
     height: 20,
-    speed: 15 // tripled speed (5 * 3)
+    speed: 50 // 10× speed (5 * 10)
 };
 
 // Player bullets array
@@ -175,7 +175,7 @@ document.addEventListener('keydown', (e) => {
     }
     if (e.key === ' ') {
         const now = performance.now();
-        if (now - lastShot < FIRE_INTERVAL) return; // too soon
+        if (now - lastShot < FIRE_INTERVAL) return; // throttle
         lastShot = now;
         // Check if player is on platform
         if (player.y + player.height === platform.y) {
