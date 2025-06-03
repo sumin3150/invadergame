@@ -14,6 +14,33 @@ body {
     font-family: monospace;
 }
 
+#controls {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+    z-index: 10;
+}
+
+#controls button {
+    width: 64px;
+    height: 64px;
+    border: none;
+    border-radius: 50%;
+    font-size: 2rem;
+    background: #333;
+    color: #fff;
+    touch-action: none;
+}
+
+@media (min-width: 768px) {
+    #controls {
+        display: none;
+    }
+}
+
 canvas {
     background-color: #000;
     border: 2px solid #fff;

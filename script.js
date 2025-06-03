@@ -5,6 +5,19 @@ const startBtn = document.getElementById('startBtn');
 const scoreDisplay = document.getElementById('score');
 const livesDisplay = document.getElementById('lives');
 
+// Mobile controls
+let moveL = false;
+let moveR = false;
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
+const fireBtn = document.getElementById('fireBtn');
+[leftBtn, rightBtn, fireBtn].filter(Boolean).forEach(b => b.addEventListener('contextmenu', e => e.preventDefault()));
+leftBtn?.addEventListener('pointerdown', () => moveL = true);
+leftBtn?.addEventListener('pointerup', () => moveL = false);
+rightBtn?.addEventListener('pointerdown', () => moveR = true);
+rightBtn?.addEventListener('pointerup', () => moveR = false);
+fireBtn?.addEventListener('pointerdown', shoot);
+
 // Platform configuration
 const platform = {
     x: 0,
@@ -158,7 +171,9 @@ startBtn.addEventListener('click', () => {
         player.x = canvas.width / 2 - 20;
         initAliens();
         bullets = [];
-        descentTimer = 0; // Reset descent timer
+        descentTimer = 0;
+        moveL = false;
+        moveR = false;
         isGameRunning = true;
         gameLoop();
     }
@@ -167,10 +182,10 @@ startBtn.addEventListener('click', () => {
 document.addEventListener('keydown', (e) => {
     if (!isGameRunning) return;
     
-    if (e.key === 'ArrowLeft' || e.key === 'a') {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || moveL) {
         player.x = Math.max(0, player.x - player.speed);
     }
-    if (e.key === 'ArrowRight' || e.key === 'd') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || moveR) {
         player.x = Math.min(canvas.width - player.width, player.x + player.speed);
     }
     if (e.key === ' ') {
