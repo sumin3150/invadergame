@@ -5,13 +5,21 @@ const startBtn = document.getElementById('startBtn');
 const scoreDisplay = document.getElementById('score');
 const livesDisplay = document.getElementById('lives');
 
+// Platform configuration
+const platform = {
+    x: 0,
+    y: canvas.height - 20,
+    width: canvas.width,
+    height: 20
+};
+
 // Game state
 let isGameRunning = false;
 let score = 0;
 let lives = 3;
 let player = {
     x: canvas.width / 2 - 20,
-    y: canvas.height - 30,
+    y: canvas.height - 50,
     width: 40,
     height: 20,
     speed: 5
@@ -19,6 +27,7 @@ let player = {
 
 // Player bullets array
 let bullets = [];
+
 
 // Alien configuration
 const alienRows = 3;
@@ -50,6 +59,10 @@ function gameLoop() {
     
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw platform
+    ctx.fillStyle = 'white';
+    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
     
     // Draw player
     ctx.fillStyle = 'white';
@@ -147,9 +160,17 @@ document.addEventListener('keydown', (e) => {
         player.x = Math.min(canvas.width - player.width, player.x + player.speed);
     }
     if (e.key === ' ' && bullets.length === 0) {
-        bullets.push({
-            x: player.x + player.width / 2 - 1,
-            y: player.y
-        });
+        // Check if player is on platform
+        if (player.y + player.height === platform.y) {
+            bullets.push({
+                x: player.x + player.width / 2 - 1,
+                y: platform.y - 1
+            });
+        } else {
+            bullets.push({
+                x: player.x + player.width / 2 - 1,
+                y: player.y
+            });
+        }
     }
 });
