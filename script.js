@@ -104,17 +104,15 @@ function gameLoop() {
         }
     });
     
-    // Move aliens only if enough time has passed
-    const currentTime = Date.now();
-    if (currentTime - lastMoveTime >= alienMoveInterval) {
-        if (moveDown) {
-            alienDirection *= -1;
-            aliens.forEach(alien => alien.y += 20);
-        } else {
-            aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
-        }
-        lastMoveTime = currentTime;
-    }
+    // Stop alien movement
+    // (Commenting out movement code)
+    // if (moveDown) {
+    //     alienDirection *= -1;
+    //     aliens.forEach(alien => alien.y += 20);
+    // } else {
+    //     aliens.forEach(alien => alien.x += alienDirection * alienSpeed);
+    // }
+    // lastMoveTime = currentTime;
     
     // Check game over conditions
     if (aliens.length === 0) {
